@@ -11,6 +11,7 @@
 A modular Android application built with Kotlin that consumes the Rick and Morty API and showcases a production-oriented architecture with MVVM, repository abstraction, dependency injection, pagination, and local caching.
 
 This project was designed as a clean portfolio sample focused on code organization, maintainability, and scalability.
+It also documents a practical vibe-coding pass where documentation polish and code quality improvements evolved together.
 
 ## Demo
 
@@ -132,6 +133,7 @@ This repository now documents and reflects a modernization pass aimed at removin
 - Added bilingual documentation in English and Brazilian Portuguese
 - Fixed broken image references by pointing the README to local `design` assets
 - Added architecture and data-flow diagrams to explain the modular structure quickly
+- Documented the project as an intentional vibe-coding modernization pass
 - Highlighted the current Android stack already in use: Java 17, Kotlin 2.2.10, AGP 9.1.0, compileSdk 36, targetSdk 36, and AndroidX Navigation 2.9.7
 - Replaced fragment `ViewBinding` patterns that could retain the view after `onDestroyView`
 - Prevented fragile adapter click handling that depended on `adapterPosition` and nullable items
@@ -146,6 +148,7 @@ This repository now documents and reflects a modernization pass aimed at removin
 - Visual badges for stack, architecture, modules, and modernization status
 - Demo section using real app screens from `design/`
 - Architecture and data-flow diagrams in Mermaid
+- Explicit vibe-coding note for the modernization and cleanup pass
 - Documentation of module responsibilities and technical stack
 - Code quality fixes for fragments, adapters, and ViewModel disposal
 - Real unit test coverage added for domain mapping flows

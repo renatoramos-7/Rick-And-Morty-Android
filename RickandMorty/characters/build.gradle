@@ -82,6 +82,7 @@ dependencies {
     kapt ProjectDependencies.dagger_processor
 
     // Test Dependencies.
+    testImplementation ProjectDependencies.arch_core_testing
     testImplementation ProjectDependencies.junit
     testImplementation ProjectDependencies.kotlin_test
     testImplementation ProjectDependencies.kotlin_test_junit

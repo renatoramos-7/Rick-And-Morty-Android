@@ -11,6 +11,7 @@
 Aplicativo Android modularizado em Kotlin que consome a API de Rick and Morty e demonstra uma arquitetura orientada a produção com MVVM, repositórios, injeção de dependência, paginação e cache local.
 
 Este projeto foi pensado como uma vitrine técnica para portfólio, com foco em organização de código, escalabilidade e manutenção.
+Ele também registra uma sessão prática de vibe coding, em que evolução visual da documentação e melhorias reais de qualidade caminharam juntas.
 
 ## Demo
 
@@ -132,6 +133,7 @@ Este repositório agora documenta e reflete uma passada de modernização pensad
 - Documentação bilíngue em inglês e português do Brasil
 - Correção das imagens quebradas com uso dos assets locais da pasta `design`
 - Inclusão de diagramas de arquitetura e fluxo de dados para explicar a estrutura modular rapidamente
+- Registro do projeto como uma modernização intencional conduzida em vibe coding
 - Destaque da stack Android atual já presente no projeto: Java 17, Kotlin 2.2.10, AGP 9.1.0, compileSdk 36, targetSdk 36 e AndroidX Navigation 2.9.7
 - Ajuste do padrão de `ViewBinding` nos fragments para evitar retenção de view após `onDestroyView`
 - Correção de cliques frágeis nos adapters paginados que dependiam de `adapterPosition` e itens nulos
@@ -146,6 +148,7 @@ Este repositório agora documenta e reflete uma passada de modernização pensad
 - Inclusão de badges visuais para stack, arquitetura, módulos e status de modernização
 - Seção de demo usando telas reais do app na pasta `design/`
 - Diagramas Mermaid de arquitetura e fluxo de dados
+- Menção explícita à sessão de vibe coding desta modernização
 - Documentação das responsabilidades de módulos e stack técnica
 - Correções de qualidade em fragments, adapters e descarte de recursos nos ViewModels
 - Cobertura de testes reais para os fluxos de mapeamento da camada de domínio
