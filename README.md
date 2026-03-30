@@ -6,6 +6,7 @@
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.2.10-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Architecture](https://img.shields.io/badge/Architecture-MVVM%20%2B%20Repository-0A66C2?style=for-the-badge)
 ![Modules](https://img.shields.io/badge/Modules-6-111827?style=for-the-badge)
+![Coverage](https://img.shields.io/badge/Coverage-19.31%25-F59E0B?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Modernized%20Portfolio%20Build-16A34A?style=for-the-badge)
 
 A modular Android application built with Kotlin that consumes the Rick and Morty API and showcases a production-oriented architecture with MVVM, repository abstraction, dependency injection, pagination, and local caching.
@@ -140,6 +141,13 @@ This repository now documents and reflects a modernization pass aimed at removin
 - Improved paged footer state updates to avoid broad `notifyDataSetChanged()` refreshes
 - Centralized Rx cleanup in `BaseViewModel` so disposal is consistent across screens
 - Replaced placeholder core unit tests with real DTO-to-domain mapping tests
+
+## Test coverage
+
+- Current aggregated line coverage: `19.31%`
+- Coverage is measured with JaCoCo using the repository task `./gradlew clean jacocoRepoReport`
+- HTML report output: `RickandMorty/build/reports/jacoco/jacocoRepoReport/html/index.html`
+- XML report output: `RickandMorty/build/reports/jacoco/jacocoRepoReport/jacocoRepoReport.xml`
 
 ## Change log for this cleanup
 

@@ -2,6 +2,11 @@ plugins {
     id 'com.android.application' version '9.1.0' apply false
     id 'com.android.library' version '9.1.0' apply false
     id 'com.android.legacy-kapt' version '9.1.0' apply false
+    id 'jacoco'
+}
+
+jacoco {
+    toolVersion = '0.8.12'
 }
 
 allprojects {
@@ -13,4 +18,66 @@ allprojects {
 
 tasks.register('clean', Delete) {
     delete rootProject.buildDir
+}
+
+def coverageModules = [
+    project(':core'),
+    project(':characters'),
+    project(':episodes')
+]
+
+tasks.register('jacocoRepoReport', JacocoReport) {
+    dependsOn(
+        ':core:testDebugUnitTest',
+        ':characters:testDebugUnitTest',
+        ':episodes:testDebugUnitTest'
+    )
+
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+
+    def fileFilter = [
+        '**/R.class',
+        '**/R$*.class',
+        '**/BuildConfig.*',
+        '**/Manifest*.*',
+        '**/*Test*.*',
+        '**/android/**/*.*',
+        '**/*Binding.*',
+        '**/*BindingImpl.*',
+        '**/databinding/**/*.*',
+        '**/*MapperImpl*.*',
+        '**/*Directions*.*',
+        '**/*Args*.*',
+        '**/Dagger*.*',
+        '**/*_Factory*.*',
+        '**/*_MembersInjector*.*',
+        '**/*Module*.*',
+        '**/*Component*.*',
+        '**/*BR*.*'
+    ]
+
+    classDirectories.setFrom(coverageModules.collect { module ->
+        files(
+            fileTree(dir: "${module.projectDir}/build/intermediates/built_in_kotlinc/debug/compileDebugKotlin/classes", excludes: fileFilter),
+            fileTree(dir: "${module.projectDir}/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes", excludes: fileFilter)
+        )
+    })
+
+    sourceDirectories.setFrom(coverageModules.collect { module ->
+        files("${module.projectDir}/src/main/java")
+    })
+
+    additionalSourceDirs.setFrom(sourceDirectories)
+
+    executionData.setFrom(coverageModules.collect { module ->
+        fileTree(dir: module.projectDir, includes: [
+            'build/jacoco/testDebugUnitTest.exec',
+            'build/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec',
+            'build/outputs/unit_test_code_coverage/debugUnitTest/*.exec'
+        ])
+    })
 }

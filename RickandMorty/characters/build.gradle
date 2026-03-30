@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'com.android.legacy-kapt'
+    id 'jacoco'
 }
 
 
@@ -47,6 +48,7 @@ android {
             //signingConfig signingConfigs.debug
             minifyEnabled false
             versionNameSuffix '-DEBUG'
+            enableUnitTestCoverage true
         }
     }
 
@@ -69,6 +71,10 @@ android {
             ]
         }
     }
+}
+
+jacoco {
+    toolVersion = "0.8.12"
 }
 
 dependencies {
