@@ -2,9 +2,27 @@
 
 [Português (Brasil)](./README.pt-BR.md) | **English**
 
+![Android](https://img.shields.io/badge/Android-21%2B-34A853?style=for-the-badge&logo=android&logoColor=white)
+![Kotlin](https://img.shields.io/badge/Kotlin-2.2.10-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)
+![Architecture](https://img.shields.io/badge/Architecture-MVVM%20%2B%20Repository-0A66C2?style=for-the-badge)
+![Modules](https://img.shields.io/badge/Modules-6-111827?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Modernized%20Portfolio%20Build-16A34A?style=for-the-badge)
+
 A modular Android application built with Kotlin that consumes the Rick and Morty API and showcases a production-oriented architecture with MVVM, repository abstraction, dependency injection, pagination, and local caching.
 
 This project was designed as a clean portfolio sample focused on code organization, maintainability, and scalability.
+
+## Demo
+
+<p align="center">
+  <img src="./design/Screenshot1.jpg" width="220" alt="Characters screen" />
+  <img src="./design/Screenshot2.jpg" width="220" alt="Episodes screen" />
+  <img src="./design/Screenshot3.jpg" width="220" alt="List details and navigation flow" />
+</p>
+
+<p align="center">
+  <sub>Preview of the main browsing flows available in the current build.</sub>
+</p>
 
 ## Overview
 
@@ -22,14 +40,6 @@ The app delivers a simple browsing experience for Rick and Morty content through
 - PaperDB-based local fallback cache
 - View Binding and Navigation Component integration
 - Java 17 toolchain and modern Android Gradle setup
-
-## Screenshots
-
-<p align="center">
-  <img src="./design/Screenshot1.jpg" width="220" alt="Characters screen" />
-  <img src="./design/Screenshot2.jpg" width="220" alt="Episodes screen" />
-  <img src="./design/Screenshot3.jpg" width="220" alt="List details and navigation flow" />
-</p>
 
 ## Architecture
 
@@ -99,6 +109,7 @@ flowchart LR
 ## Tech stack
 
 - Kotlin
+- Android Gradle Plugin 9.1.0
 - Android View Binding
 - MVVM
 - Repository Pattern
@@ -112,6 +123,32 @@ flowchart LR
 - Glide
 - PaperDB
 - JUnit and Mockito
+
+## Modernization and quality improvements
+
+This repository now documents and reflects a modernization pass aimed at removing legacy rough edges and making the project presentation consistent with the codebase quality.
+
+- Reworked the README into a recruiter-friendly portfolio presentation
+- Added bilingual documentation in English and Brazilian Portuguese
+- Fixed broken image references by pointing the README to local `design` assets
+- Added architecture and data-flow diagrams to explain the modular structure quickly
+- Highlighted the current Android stack already in use: Java 17, Kotlin 2.2.10, AGP 9.1.0, compileSdk 36, targetSdk 36, and AndroidX Navigation 2.9.7
+- Replaced fragment `ViewBinding` patterns that could retain the view after `onDestroyView`
+- Prevented fragile adapter click handling that depended on `adapterPosition` and nullable items
+- Improved paged footer state updates to avoid broad `notifyDataSetChanged()` refreshes
+- Centralized Rx cleanup in `BaseViewModel` so disposal is consistent across screens
+- Replaced placeholder core unit tests with real DTO-to-domain mapping tests
+
+## Change log for this cleanup
+
+- Portfolio-oriented README rewrite in English
+- PT-BR README added with cross-links between both versions
+- Visual badges for stack, architecture, modules, and modernization status
+- Demo section using real app screens from `design/`
+- Architecture and data-flow diagrams in Mermaid
+- Documentation of module responsibilities and technical stack
+- Code quality fixes for fragments, adapters, and ViewModel disposal
+- Real unit test coverage added for domain mapping flows
 
 ## Why this project stands out
 

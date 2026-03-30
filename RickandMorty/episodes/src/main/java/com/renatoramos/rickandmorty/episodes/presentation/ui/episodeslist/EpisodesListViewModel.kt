@@ -19,11 +19,6 @@ class EpisodesListViewModel @Inject constructor(private val episodesUseCase: Epi
     private lateinit var episodesDataSourceFactory: EpisodesDataSourceFactory
     private val pageSize = 20
 
-    override fun onCleared() {
-        super.onCleared()
-        onStopDisposable()
-    }
-
     fun getAllEpisodes() {
         val compositeDisposable = getCompositeDisposable()
 

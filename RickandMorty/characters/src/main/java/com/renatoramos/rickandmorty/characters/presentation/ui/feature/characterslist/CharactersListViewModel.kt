@@ -19,11 +19,6 @@ class CharactersListViewModel @Inject constructor(private val charactersUseCase:
     private lateinit var charactersDataSourceFactory: CharactersDataSourceFactory
     private val pageSize = 20
 
-    override fun onCleared() {
-        super.onCleared()
-        onStopDisposable()
-    }
-
     fun getAllCharacters() {
         val compositeDisposable = getCompositeDisposable()
 

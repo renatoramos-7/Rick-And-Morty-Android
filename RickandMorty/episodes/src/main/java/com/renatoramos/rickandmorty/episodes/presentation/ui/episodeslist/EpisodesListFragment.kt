@@ -22,16 +22,17 @@ class EpisodesListFragment : BaseFragment(), EpisodesListListener {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var episodesListViewModel: EpisodesListViewModel
-    private lateinit var episodesListFragmentBinding: FragmentEpisodesListBinding
+    private var _binding: FragmentEpisodesListBinding? = null
+    private val binding: FragmentEpisodesListBinding
+        get() = checkNotNull(_binding) { "Binding is only valid between onCreateView and onDestroyView." }
     private lateinit var episodesListAdapter: EpisodesListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        episodesListFragmentBinding = FragmentEpisodesListBinding.inflate(inflater, container, false)
-
-        return episodesListFragmentBinding.root
+        _binding = FragmentEpisodesListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,9 +59,9 @@ class EpisodesListFragment : BaseFragment(), EpisodesListListener {
 
     private fun setObservables() {
         episodesListViewModel.getState().observe(viewLifecycleOwner) { state ->
-            episodesListFragmentBinding.progressBar.visibility =
+            binding.progressBar.visibility =
                 if (episodesListViewModel.listIsEmpty() && state == State.LOADING) View.VISIBLE else View.GONE
-            episodesListFragmentBinding.txtError.visibility =
+            binding.txtError.visibility =
                 if (episodesListViewModel.listIsEmpty() && state == State.ERROR) View.VISIBLE else View.GONE
             if (!episodesListViewModel.listIsEmpty()) {
                 episodesListAdapter.setState(state ?: State.DONE)
@@ -73,24 +74,30 @@ class EpisodesListFragment : BaseFragment(), EpisodesListListener {
     }
 
     private fun initialize() {
-        episodesListFragmentBinding.txtError.setOnClickListener { episodesListViewModel.retry() }
+        binding.txtError.setOnClickListener { episodesListViewModel.retry() }
     }
 
     private fun setupRecyclerView() {
-        episodesListFragmentBinding.episodesRecyclerView.layoutManager =
+        binding.episodesRecyclerView.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        episodesListFragmentBinding.episodesRecyclerView.setHasFixedSize(true)
+        binding.episodesRecyclerView.setHasFixedSize(true)
 
         episodesListAdapter = EpisodesListAdapter(
             { episodesListViewModel.retry() },
             this
         )
 
-        episodesListFragmentBinding.episodesRecyclerView.adapter = episodesListAdapter
+        binding.episodesRecyclerView.adapter = episodesListAdapter
     }
 
     private fun getAllEpisodes() {
         episodesListViewModel.getAllEpisodes()
+    }
+
+    override fun onDestroyView() {
+        binding.episodesRecyclerView.adapter = null
+        _binding = null
+        super.onDestroyView()
     }
 
 }

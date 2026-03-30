@@ -7,24 +7,29 @@ import io.reactivex.disposables.Disposable
 
 abstract class BaseViewModel : ViewModel() {
 
-    private var compositeDisposable: CompositeDisposable? = null
+    private var compositeDisposable = CompositeDisposable()
 
     /**
      * Contains common cleanup actions needed for all ViewModel, if any.
      * Subclasses may override this.
      */
     fun onStopDisposable() {
-        getCompositeDisposable().clear()
+        compositeDisposable.clear()
     }
 
     protected fun addDisposable(disposable: Disposable) {
-        getCompositeDisposable().add(disposable)
+        compositeDisposable.add(disposable)
     }
 
     protected fun getCompositeDisposable(): CompositeDisposable {
-        if (compositeDisposable == null || compositeDisposable!!.isDisposed) {
+        if (compositeDisposable.isDisposed) {
             compositeDisposable = CompositeDisposable()
         }
-        return compositeDisposable as CompositeDisposable
+        return compositeDisposable
+    }
+
+    override fun onCleared() {
+        compositeDisposable.clear()
+        super.onCleared()
     }
 }

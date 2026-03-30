@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.renatoramos.rickandmorty.characters.databinding.FragmentCharactersListBinding
 import com.renatoramos.rickandmorty.characters.presentation.ui.feature.characterslist.adapter.CharactersListAdapter
@@ -23,16 +22,17 @@ class CharactersListFragment : BaseFragment(), CharactersListListener {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var charactersListViewModel: CharactersListViewModel
-    private lateinit var charactersListFragmentBinding: FragmentCharactersListBinding
+    private var _binding: FragmentCharactersListBinding? = null
+    private val binding: FragmentCharactersListBinding
+        get() = checkNotNull(_binding) { "Binding is only valid between onCreateView and onDestroyView." }
     private lateinit var charactersListAdapter: CharactersListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        charactersListFragmentBinding = FragmentCharactersListBinding.inflate(inflater, container, false)
-
-        return charactersListFragmentBinding.root
+        _binding = FragmentCharactersListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,9 +59,9 @@ class CharactersListFragment : BaseFragment(), CharactersListListener {
 
     private fun setObservables() {
         charactersListViewModel.getState().observe(viewLifecycleOwner) { state ->
-            charactersListFragmentBinding.progressBar.visibility =
+            binding.progressBar.visibility =
                 if (charactersListViewModel.listIsEmpty() && state == State.LOADING) View.VISIBLE else View.GONE
-            charactersListFragmentBinding.txtError.visibility =
+            binding.txtError.visibility =
                 if (charactersListViewModel.listIsEmpty() && state == State.ERROR) View.VISIBLE else View.GONE
             if (!charactersListViewModel.listIsEmpty()) {
                 charactersListAdapter.setState(state ?: State.DONE)
@@ -74,13 +74,13 @@ class CharactersListFragment : BaseFragment(), CharactersListListener {
     }
 
     private fun initialize() {
-        charactersListFragmentBinding.txtError.setOnClickListener { charactersListViewModel.retry() }
+        binding.txtError.setOnClickListener { charactersListViewModel.retry() }
     }
 
     private fun setupRecyclerView() {
-        charactersListFragmentBinding.charactersRecyclerView.layoutManager =
+        binding.charactersRecyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        charactersListFragmentBinding.charactersRecyclerView.setHasFixedSize(true)
+        binding.charactersRecyclerView.setHasFixedSize(true)
 
 
         charactersListAdapter = CharactersListAdapter(
@@ -88,11 +88,17 @@ class CharactersListFragment : BaseFragment(), CharactersListListener {
             this
         )
 
-        charactersListFragmentBinding.charactersRecyclerView.adapter = charactersListAdapter
+        binding.charactersRecyclerView.adapter = charactersListAdapter
     }
 
     private fun getAllCharacters() {
         charactersListViewModel.getAllCharacters()
+    }
+
+    override fun onDestroyView() {
+        binding.charactersRecyclerView.adapter = null
+        _binding = null
+        super.onDestroyView()
     }
 
 }

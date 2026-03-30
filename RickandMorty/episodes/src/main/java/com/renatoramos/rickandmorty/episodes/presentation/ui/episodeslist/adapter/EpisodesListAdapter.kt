@@ -15,33 +15,42 @@ class EpisodesListAdapter (
     private val episodesListListener: EpisodesListListener
 ) : PagedListAdapter<EpisodeViewObject, RecyclerView.ViewHolder>(EpisodeViewObjectDiffCallback) {
 
-    private val DATA_VIEW_TYPE = 1
-    private val FOOTER_VIEW_TYPE = 2
+    private companion object {
+        const val DATA_VIEW_TYPE = 1
+        const val FOOTER_VIEW_TYPE = 2
+        val EpisodeViewObjectDiffCallback = object : DiffUtil.ItemCallback<EpisodeViewObject>() {
+            override fun areItemsTheSame(oldItem: EpisodeViewObject, newItem: EpisodeViewObject): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: EpisodeViewObject, newItem: EpisodeViewObject): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
 
     private var state = State.LOADING
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val viewHolder: RecyclerView.ViewHolder
-
-         if (viewType == DATA_VIEW_TYPE) {
-             viewHolder = EpisodeViewHolder.create(parent)
-
-             viewHolder.itemView.setOnClickListener{
-                 val episodeViewObject = getItem(viewHolder.adapterPosition)
-                 episodesListListener.onItemClick(episodeViewObject!!.episode)
-             }
+        return if (viewType == DATA_VIEW_TYPE) {
+            EpisodeViewHolder.create(parent)
         } else {
-             viewHolder = ListFooterViewHolder.create(retry, parent)
+            ListFooterViewHolder.create(retry, parent)
         }
-
-        return viewHolder
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (getItemViewType(position) == DATA_VIEW_TYPE)
-            (holder as EpisodeViewHolder).bind(getItem(position))
-        else (holder as ListFooterViewHolder).bind(state)
+        if (getItemViewType(position) == DATA_VIEW_TYPE) {
+            val item = getItem(position)
+            (holder as EpisodeViewHolder).bind(item)
+            holder.itemView.setOnClickListener {
+                item?.let { episode ->
+                    episodesListListener.onItemClick(episode.episode)
+                }
+            }
+        } else {
+            (holder as ListFooterViewHolder).bind(state)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -57,19 +66,21 @@ class EpisodesListAdapter (
     }
 
     fun setState(state: State) {
+        val hadFooter = hasFooter()
+        val previousState = this.state
         this.state = state
-        notifyDataSetChanged()
-    }
+        val hasFooter = hasFooter()
 
-    companion object {
-        val EpisodeViewObjectDiffCallback = object : DiffUtil.ItemCallback<EpisodeViewObject>() {
-            override fun areItemsTheSame(oldItem: EpisodeViewObject, newItem: EpisodeViewObject): Boolean {
-                return oldItem.id == newItem.id
+        when {
+            hadFooter != hasFooter -> {
+                if (hadFooter) {
+                    notifyItemRemoved(super.getItemCount())
+                } else {
+                    notifyItemInserted(super.getItemCount())
+                }
             }
-
-            override fun areContentsTheSame(oldItem: EpisodeViewObject, newItem: EpisodeViewObject): Boolean {
-                return oldItem == newItem
-            }
+            hasFooter && previousState != state -> notifyItemChanged(itemCount - 1)
         }
     }
+
 }

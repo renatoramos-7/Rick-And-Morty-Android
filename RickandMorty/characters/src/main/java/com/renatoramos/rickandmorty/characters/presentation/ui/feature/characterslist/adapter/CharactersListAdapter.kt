@@ -11,37 +11,46 @@ import com.renatoramos.rickandmorty.common.util.State
 import com.renatoramos.rickandmorty.domain.viewobject.characters.CharacterViewObject
 
 class CharactersListAdapter(
-private val retry: () -> Unit,
-private val charactersListListener: CharactersListListener
+    private val retry: () -> Unit,
+    private val charactersListListener: CharactersListListener
 ) : PagedListAdapter<CharacterViewObject, RecyclerView.ViewHolder>(characterViewObjectDiffCallback) {
 
-    private val DATA_VIEW_TYPE = 1
-    private val FOOTER_VIEW_TYPE = 2
+    private companion object {
+        const val DATA_VIEW_TYPE = 1
+        const val FOOTER_VIEW_TYPE = 2
+        val characterViewObjectDiffCallback = object : DiffUtil.ItemCallback<CharacterViewObject>() {
+            override fun areItemsTheSame(oldItem: CharacterViewObject, newItem: CharacterViewObject): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: CharacterViewObject, newItem: CharacterViewObject): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
 
     private var state = State.LOADING
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val viewHolder: RecyclerView.ViewHolder
-
-        if (viewType == DATA_VIEW_TYPE) {
-            viewHolder = CharactersViewHolder.create(parent)
-
-            viewHolder.itemView.setOnClickListener{
-                val characterViewObject = getItem(viewHolder.adapterPosition)
-                charactersListListener.onItemClick(characterViewObject!!.species)
-            }
+        return if (viewType == DATA_VIEW_TYPE) {
+            CharactersViewHolder.create(parent)
         } else {
-            viewHolder =  ListFooterViewHolder.create(retry, parent)
+            ListFooterViewHolder.create(retry, parent)
         }
-
-        return viewHolder
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (getItemViewType(position) == DATA_VIEW_TYPE)
-            (holder as CharactersViewHolder).bind(getItem(position))
-        else (holder as ListFooterViewHolder).bind(state)
+        if (getItemViewType(position) == DATA_VIEW_TYPE) {
+            val item = getItem(position)
+            (holder as CharactersViewHolder).bind(item)
+            holder.itemView.setOnClickListener {
+                item?.let { character ->
+                    charactersListListener.onItemClick(character.species)
+                }
+            }
+        } else {
+            (holder as ListFooterViewHolder).bind(state)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -57,19 +66,21 @@ private val charactersListListener: CharactersListListener
     }
 
     fun setState(state: State) {
+        val hadFooter = hasFooter()
+        val previousState = this.state
         this.state = state
-        notifyDataSetChanged()
-    }
+        val hasFooter = hasFooter()
 
-    companion object {
-        val characterViewObjectDiffCallback = object : DiffUtil.ItemCallback<CharacterViewObject>() {
-            override fun areItemsTheSame(oldItem: CharacterViewObject, newItem: CharacterViewObject): Boolean {
-                return oldItem.id == newItem.id
+        when {
+            hadFooter != hasFooter -> {
+                if (hadFooter) {
+                    notifyItemRemoved(super.getItemCount())
+                } else {
+                    notifyItemInserted(super.getItemCount())
+                }
             }
-
-            override fun areContentsTheSame(oldItem: CharacterViewObject, newItem: CharacterViewObject): Boolean {
-                return oldItem == newItem
-            }
+            hasFooter && previousState != state -> notifyItemChanged(itemCount - 1)
         }
     }
+
 }
