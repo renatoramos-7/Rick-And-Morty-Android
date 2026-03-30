@@ -6,7 +6,7 @@
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.2.10-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Arquitetura](https://img.shields.io/badge/Arquitetura-MVVM%20%2B%20Repository-0A66C2?style=for-the-badge)
 ![Módulos](https://img.shields.io/badge/M%C3%B3dulos-6-111827?style=for-the-badge)
-![Coverage](https://img.shields.io/badge/Coverage-19.31%25-F59E0B?style=for-the-badge)
+![Coverage](https://img.shields.io/badge/Coverage-19.31%25-DC2626?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Portfolio%20Modernizado-16A34A?style=for-the-badge)
 
 Aplicativo Android modularizado em Kotlin que consome a API de Rick and Morty e demonstra uma arquitetura orientada a produção com MVVM, repositórios, injeção de dependência, paginação e cache local.
