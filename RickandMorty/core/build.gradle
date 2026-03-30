@@ -1,0 +1,156 @@
+plugins {
+    id 'com.android.library'
+    id 'com.android.legacy-kapt'
+}
+
+
+android {
+    namespace 'com.renatoramos.rickandmorty.common'
+    compileSdk AndroidConfig.compileSdk
+
+    defaultConfig {
+        minSdk AndroidConfig.minSdk
+        targetSdk AndroidConfig.targetSdk
+        versionCode AndroidConfig.versionCode
+        versionName AndroidConfig.versionName
+        testInstrumentationRunner AndroidConfig.testInstrumentationRunner
+
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas".toString())
+            }
+        }
+    }
+
+    kapt {
+        correctErrorTypes = true
+    }
+
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildTypes {
+
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            //signingConfig signingConfigs.release
+        }
+
+        debug {
+            //signingConfig signingConfigs.debug
+            minifyEnabled false
+            versionNameSuffix '-DEBUG'
+        }
+    }
+
+    packaging {
+        resources {
+            excludes += [
+                'META-INF/DEPENDENCIES.txt',
+                'META-INF/LICENSE.txt',
+                'META-INF/NOTICE.txt',
+                'META-INF/NOTICE',
+                'META-INF/LICENSE',
+                'META-INF/DEPENDENCIES',
+                'META-INF/notice.txt',
+                'META-INF/license.txt',
+                'META-INF/dependencies.txt',
+                'META-INF/LGPL2.1'
+            ]
+        }
+    }
+}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Kotlin
+    api ProjectDependencies.kotlin_stdlib_jdk8
+    api ProjectDependencies.kotlinKTX
+
+    // Android X Dependencies.
+    api ProjectDependencies.androidx_appcompat
+    api ProjectDependencies.androidx_constraintlayout
+
+    // Dagger Dependencies.
+    kapt ProjectDependencies.dagger_compiler
+    kapt ProjectDependencies.dagger_processor
+    api ProjectDependencies.dagger
+    api ProjectDependencies.dagger_android_support
+    api ProjectDependencies.dagger_android
+
+    //Navigation
+    api ProjectDependencies.navigation_fragment
+    api ProjectDependencies.navigation_ui_ktx
+    api ProjectDependencies.navigation_dynamic_features
+
+    // Lifecycle components
+    // ViewModel and LiveData
+    api ProjectDependencies.androidx_lifecycle_ktx
+    api ProjectDependencies.androidx_viewmodel_ktx
+    api ProjectDependencies.androidx_livedata_ktx
+    api ProjectDependencies.androidx_lifecycle_common_java8
+
+    // Android paging.
+    api ProjectDependencies.androidx_paging
+    api ProjectDependencies.androidx_paging_rxjava2
+
+    // ReactiveX Dependencies.
+    api ProjectDependencies.rxjava2
+    api ProjectDependencies.rxandroid2
+
+    // Retrofit.
+    api ProjectDependencies.retrofit2
+
+    // RetroFit adapter
+    api ProjectDependencies.retrofit2_adapter_rxjava2
+
+    // Retrofit Converter
+    api ProjectDependencies.retrofit2_converter_moshi
+
+    // Moshi
+    api ProjectDependencies.moshi
+    api ProjectDependencies.moshi_kotlin
+    api ProjectDependencies.moshi_adapters
+
+    // OkHttp
+    api ProjectDependencies.okhttp
+    api ProjectDependencies.okhttp_logging_interceptor
+
+    //paperdb
+    api ProjectDependencies.paperdb
+
+    //Glide
+    api ProjectDependencies.glide
+    kapt ProjectDependencies.glide_compiler
+    api ProjectDependencies.glide_okhttp3
+
+    // Test Dependencies.
+    // JUnit
+   testImplementation ProjectDependencies.junit
+
+    //Mockito
+    testImplementation ProjectDependencies.mockito
+    androidTestImplementation ProjectDependencies.mockitoAndroid
+    testImplementation ProjectDependencies.mockito_inline
+
+    //Mockito  Kotlin
+    testImplementation ProjectDependencies.mockito_Kotlin
+
+    // Kotlin Test Support
+    testImplementation ProjectDependencies.kotlin_test
+    testImplementation ProjectDependencies.kotlin_test_junit
+
+    // Espresso
+    androidTestImplementation ProjectDependencies.androidx_test
+    androidTestImplementation ProjectDependencies.androidx_test_espresso
+
+}

@@ -1,0 +1,89 @@
+plugins {
+    id 'com.android.library'
+    id 'com.android.legacy-kapt'
+}
+
+
+android {
+    namespace 'com.renatoramos.rickandmorty.characters'
+    compileSdk AndroidConfig.compileSdk
+
+    defaultConfig {
+        minSdk AndroidConfig.minSdk
+        targetSdk AndroidConfig.targetSdk
+        versionCode AndroidConfig.versionCode
+        versionName AndroidConfig.versionName
+        testInstrumentationRunner AndroidConfig.testInstrumentationRunner
+
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas".toString())
+            }
+        }
+    }
+
+    kapt {
+        correctErrorTypes = true
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildTypes {
+
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            //signingConfig signingConfigs.release
+        }
+
+        debug {
+            //signingConfig signingConfigs.debug
+            minifyEnabled false
+            versionNameSuffix '-DEBUG'
+        }
+    }
+
+    packaging {
+        resources {
+            excludes += [
+                'META-INF/DEPENDENCIES.txt',
+                'META-INF/LICENSE.txt',
+                'META-INF/NOTICE.txt',
+                'META-INF/NOTICE',
+                'META-INF/LICENSE',
+                'META-INF/DEPENDENCIES',
+                'META-INF/notice.txt',
+                'META-INF/license.txt',
+                'META-INF/dependencies.txt',
+                'META-INF/LGPL2.1',
+                'android/databinding/DataBinderMapper.java',
+                'android/databinding/DataBindingComponent.java',
+                'android/databinding/DynamicUtil.java'
+            ]
+        }
+    }
+}
+
+dependencies {
+    //api fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Modules
+    api project(':core')
+
+    // Dagger Dependencies.
+    kapt ProjectDependencies.dagger_compiler
+    kapt ProjectDependencies.dagger_processor
+
+    // Test Dependencies.
+    testImplementation ProjectDependencies.junit
+    testImplementation ProjectDependencies.kotlin_test
+    testImplementation ProjectDependencies.kotlin_test_junit
+
+}
